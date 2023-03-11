@@ -1,0 +1,42 @@
+import pandas as pd
+df=pd.read_excel('Dataset_titanic.xlsx')
+df
+df.isna().sum()
+df.isnull().sum()
+df['Age'].fillna(df['Age'].mean(),inplace=True)
+df['Cabin'].fillna(df['Cabin'].mode()[0],inplace=True)
+df['Embarked'].fillna(df['Embarked'].mode()[0],inplace=True)
+df.isna().sum()
+df['Name']=df['Name'].astype('category')
+df['Name']=df['Name'].cat.codes
+df['Sex']=df['Sex'].astype('category')
+df['Sex']=df['Sex'].cat.codes
+df['Ticket']=df['Ticket'].astype('category')
+df['Ticket']=df['Ticket'].cat.codes
+df['Cabin']=df['Cabin'].astype('category')
+df['Cabin']=df['Cabin'].cat.codes
+df['Embarked']=df['Embarked'].astype('category')
+df['Embarked']=df['Embarked'].cat.codes
+x=df[['Name','Ticket']]
+y=df['Survived']
+x,y
+from sklearn.linear_model import LogisticRegression
+lr=LogisticRegression()
+lr.fit(x,y)
+ypredict=lr.predict(x)
+ypredict
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(y,ypredict)
+tp=cm[0][0]
+tn=cm[1][1]
+fp=cm[1][0]
+fn=cm[0][1]
+from sklearn.metrics import classification_report
+print(classification_report(y,ypredict))
+precision=tp/(tp+fp)
+recall=tp/(tp+fn)
+print(precision)
+print(recall)
+print(2*precision*recall/(precision+recall))
+print((tp+tn)/(tp+tn+fp+fn))
+print((fp+fn)/(fp+fn+tp+tn))
